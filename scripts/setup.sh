@@ -154,6 +154,9 @@ go get github.com/jehiah/json2csv
 sudo apt-get install -y python3-csvkit xmlstarlet
 sudo npm install -g xml2json-command
 
+# No screensaver on a VM as host will lock things down
+gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
+
 # clean the box
 sudo apt-get clean
 dd if=/dev/zero of=/EMPTY bs=1M > /dev/null 2>&1
