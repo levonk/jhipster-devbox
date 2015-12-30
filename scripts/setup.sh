@@ -156,6 +156,7 @@ sudo npm install -g xml2json-command
 
 # No screensaver on a VM as host will lock things down
 gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
+sudo apt-get remove -y gnome-screensaver
 
 # clean the box
 sudo apt-get clean
