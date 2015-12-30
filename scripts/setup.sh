@@ -111,7 +111,6 @@ sudo wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 cd /opt && sudo curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
 sudo ln -s /opt/cf /usr/bin/cf
 cd /home/vagrant
-
 #install Guake
 sudo apt-get install -y guake
 sudo cp /usr/share/applications/guake.desktop /etc/xdg/autostart/
@@ -143,6 +142,17 @@ sudo apt-get install -y bash-completion byobu tmux cdargs htop lsof ltrace strac
 sudo apt-get install -y exuberant-ctags 
 sudo apt-get install -y unattended-upgrades
 sudo apt-get install -y pssh clusterssh
+
+# jq is a json formatter
+sudo apt-get install -y jq
+
+# install csv2json
+sudo apt-get install -y golang-go
+go get github.com/jehiah/json2csv
+
+# install csvkit
+sudo apt-get install -y python3-csvkit xmlstarlet
+sudo npm install -g xml2json-command
 
 # clean the box
 sudo apt-get clean
