@@ -22,8 +22,14 @@ export LC_ALL='en_US.UTF-8'
 sudo locale-gen en_US.UTF-8
 sudo dpkg-reconfigure locales
 
+# we need to update to assure the latest version of the utilities
+sudo apt-get update
+
+sudo apt-get install -y git-core
+sudo apt-get install --nodeps -y etckeeper
+
 # install utilities
-sudo apt-get -y install vim git sudo zip bzip2 fontconfig curl
+sudo apt-get install -y install vim git sudo zip bzip2 fontconfig curl
 
 # install Java 8
 sudo echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
@@ -61,9 +67,8 @@ sudo echo 'LANG=en_US.UTF-8' >> /etc/environment
 sudo echo 'LANGUAGE=en_US.UTF-8' >> /etc/environment
 sudo echo 'LC_ALL=en_US.UTF-8' >> /etc/environment
 sudo echo 'LC_CTYPE=en_US.UTF-8' >> /etc/environment
+sudo locale-gen en_US en_US.UTF-8
 
-# install languages
-sudo apt-get install -y language-pack-fr
 
 # run GUI as non-privileged user
 sudo echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
@@ -90,9 +95,14 @@ sudo apt-get install -y chromium-browser
 
 # install MySQL with default passwoard as 'vagrant'
 export DEBIAN_FRONTEND=noninteractive
-echo 'mysql-server mysql-server/root_password password vagrant' | sudo debconf-set-selections
-echo 'mysql-server mysql-server/root_password_again password vagrant' | sudo debconf-set-selections
-sudo apt-get install -y mysql-server mysql-workbench
+#echo 'mysql-server mysql-server/root_password password vagrant' | sudo debconf-set-selections
+#echo 'mysql-server mysql-server/root_password_again password vagrant' | sudo debconf-set-selections
+#sudo apt-get install -y mysql-server mysql-workbench
+
+# install Postgres with default password as 'vagrant'
+sudo apt-get install -y postgresql postgresql-client postgresql-contrib libpq-dev
+sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD 'vagrant';"
+sudo apt-get install -y
 
 # install Heroku toolbelt
 sudo wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
@@ -108,7 +118,7 @@ sudo cp /usr/share/applications/guake.desktop /etc/xdg/autostart/
 
 # install Atom
 
-wget https://github.com/atom/atom/releases/download/v1.3.1/atom-amd64.deb
+wget https://github.com/atom/atom/releases/download/v1.3.2/atom-amd64.deb
 sudo dpkg -i atom-amd64.deb
 rm -f atom-amd64.deb
 sudo dpkg --configure -a
@@ -123,6 +133,16 @@ rm -Rf /home/vagrant/jhipster-travis-build
 sudo mkdir /home/vagrant/Desktop
 ln -s /opt/sts-bundle/sts-${STS_VERSION}/STS /home/vagrant/Desktop/STS
 sudo chown -R vagrant:vagrant /home/vagrant
+
+# AWS tools
+sudo apt-get install -y ec2-api-tools ec2-ami-tools
+sudo apt-get install -y iamcli rdscli moncli ascli elasticache aws-cloudformation-cli elbcli
+
+# install other tools
+sudo apt-get install -y bash-completion byobu tmux cdargs htop lsof ltrace strace zsh tofrodos ack-grep
+sudo apt-get install -y exuberant-ctags 
+sudo apt-get install -y unattended-upgrades
+sudo apt-get install -y pssh clusterssh
 
 # clean the box
 sudo apt-get clean
