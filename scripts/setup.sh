@@ -165,6 +165,10 @@ sudo gem install jekyll capistrano
 # secure the system (later)
 # http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/
 sudo apt-get remove -y libpam-google-authenticator
+echo 'auth required pam_google_authenticator.so' >> /etc/pam.d/sshd
+echo 'ChallengeResponseAuthentication yes' >> /etc/ssh/sshd_config
+sudo service ssh restart
+## TODO: Each user still has to run the 'google-authenticator' tool on their own account
 
 
 # clean the box
