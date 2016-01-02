@@ -158,6 +158,15 @@ sudo npm install -g xml2json-command
 gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
 sudo apt-get remove -y gnome-screensaver
 
+# jekyll blogging
+curl -L https://get.rvm.io | sudo bash -s stable --ruby=2.0.0
+sudo gem install jekyll capistrano
+
+# secure the system (later)
+# http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/
+sudo apt-get remove -y libpam-google-authenticator
+
+
 # clean the box
 sudo apt-get clean
 dd if=/dev/zero of=/EMPTY bs=1M > /dev/null 2>&1
