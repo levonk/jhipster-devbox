@@ -29,7 +29,7 @@ sudo apt-get install -y git-core
 sudo apt-get install --nodeps -y etckeeper
 
 # install utilities
-sudo apt-get install -y install vim git sudo zip bzip2 fontconfig curl
+sudo apt-get install -y vim git sudo zip bzip2 fontconfig curl
 
 # install Java 8
 sudo echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
