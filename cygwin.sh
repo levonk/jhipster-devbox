@@ -1,0 +1,1 @@
+export VAGRANT_DETECTED_OS=cygwin

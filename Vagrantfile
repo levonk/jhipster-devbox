@@ -4,6 +4,7 @@ Vagrant.configure("2") do |config|
     config.vm.network :forwarded_port, host: 8080, guest: 8080
     config.vm.network :forwarded_port, host: 3000, guest: 3000
     config.ssh.insert_key = true
+	config.vm.boot_timeout = 
 
     config.vm.provider :virtualbox do |vb|
         vb.gui = true
@@ -13,3 +14,4 @@ Vagrant.configure("2") do |config|
         vb.customize ["modifyvm", :id, "--accelerate3d", "on"]
     end
 end
+
