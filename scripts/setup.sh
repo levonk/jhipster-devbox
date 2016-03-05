@@ -1,9 +1,8 @@
 #!/bin/sh
 
 # update the system
-sudo apt-get remove -y --purge libreoffice*
 sudo apt-get update
-sudo apt-get upgrade -y
+sudo apt-get upgrade -q -y
 
 ################################################################################
 # This is a port of the JHipster Dockerfile,
@@ -17,11 +16,11 @@ sudo locale-gen en_US.UTF-8
 sudo dpkg-reconfigure locales
 
 # we need to update to assure the latest version of the utilities
-sudo apt-get install -y git-core
-sudo apt-get install --nodeps -y etckeeper
+sudo apt-get install -y -q git-core
+sudo apt-get install --nodeps -y -q etckeeper
 
 # install utilities
-sudo apt-get install -y vim git sudo zip bzip2 fontconfig curl
+sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
 
 # install Java 8
 sudo echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
@@ -32,7 +31,7 @@ sudo apt-get update
 export JAVA_VERSION='8'
 export JAVA_HOME='/usr/lib/jvm/java-8-oracle'
 sudo echo oracle-java-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-sudo apt-get install -y --force-yes oracle-java${JAVA_VERSION}-installer
+sudo apt-get install -y -q --force-yes oracle-java${JAVA_VERSION}-installer
 sudo  update-java-alternatives -s java-8-oracle
 
 # install maven
@@ -43,7 +42,7 @@ sudo curl -fsSL http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/bi
 
 # install node.js
 sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo bash -
-sudo apt-get install -y nodejs unzip python g++ build-essential
+sudo apt-get install -y -q nodejs unzip python g++ build-essential
 # update npm
 sudo npm install -g npm
 # install yeoman grunt bower grunt gulp
@@ -63,11 +62,12 @@ sudo echo 'LC_CTYPE=en_US.UTF-8' >> /etc/environment
 sudo locale-gen en_US en_US.UTF-8
 
 
+# install Ubuntu desktop and VirtualBox guest tools
+sudo apt-get install -y -q --no ubuntu-desktop virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
+sudo apt-get install -y gnome-session-flashback
+sudo apt-get autoremove -q -y --purge libreoffice*
 # run GUI as non-privileged user
 sudo echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
-# install Ubuntu desktop and VirtualBox guest tools
-sudo apt-get install -y ubuntu-desktop virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
-sudo apt-get install -y gnome-session-flashback
 
 ################################################################################
 # Install the development tools
@@ -83,7 +83,7 @@ sudo chown -R vagrant:vagrant /opt
 cd /home/vagrant
 
 # install Chromium Browser
-sudo apt-get install -y chromium-browser
+sudo apt-get install -y -q chromium-browser
 
 # install MySQL with default passwoard as 'vagrant'
 export DEBIAN_FRONTEND=noninteractive
@@ -92,7 +92,7 @@ export DEBIAN_FRONTEND=noninteractive
 #sudo apt-get install -y mysql-server mysql-workbench
 
 # install Postgres with default password as 'vagrant'
-sudo apt-get install -y postgresql postgresql-client postgresql-contrib libpq-dev
+sudo apt-get install -y -q postgresql postgresql-client postgresql-contrib libpq-dev
 sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD 'vagrant';"
 
 # install Heroku toolbelt
@@ -114,11 +114,11 @@ rm -f atom-amd64.deb
 sudo dpkg --configure -a
 
 
-sudo apt-get install -y golang-go
+sudo apt-get install -y -q golang-go
 go get github.com/jehiah/json2csv
 
 # install csvkit
-sudo apt-get install -y python3-csvkit xmlstarlet
+sudo apt-get install -y -q python3-csvkit xmlstarlet
 sudo npm install -g xml2json-command
 
 # No screensaver on a VM as host will lock things down
@@ -155,7 +155,7 @@ ssh-keygen -P 'changeme' -f '/home/vagrant/.ssh/id_ecdsa' -t ecdsa -C 'devbox au
 
 # secure the system (later)
 # http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/
-sudo apt-get remove -y libpam-google-authenticator
+sudo apt-get install -q -y libpam-google-authenticator
 echo 'auth required pam_google_authenticator.so' >> /etc/pam.d/sshd
 echo 'ChallengeResponseAuthentication yes' >> /etc/ssh/sshd_config
 sudo service ssh restart
