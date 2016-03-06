@@ -17,7 +17,7 @@ sudo dpkg-reconfigure locales
 
 # we need to update to assure the latest version of the utilities
 sudo apt-get install -y -q git-core
-sudo apt-get install -y -q etckeeper
+sudo apt-get install -y -q --no-install-recommends etckeeper
 
 # install utilities
 sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
@@ -65,7 +65,8 @@ sudo locale-gen en_US en_US.UTF-8
 
 
 # install Ubuntu desktop and VirtualBox guest tools
-sudo apt-get install -y -q ubuntu-desktop virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
+sudo apt-get install -y -q --no-install-recommends ubuntu-desktop
+sudo apt-get install -y -q virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
 sudo apt-get install -y -q gnome-session-flashback
 sudo apt-get autoremove -q -y --purge libreoffice*
 # run GUI as non-privileged user
