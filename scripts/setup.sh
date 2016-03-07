@@ -18,6 +18,10 @@ sudo dpkg-reconfigure locales
 # we need to update to assure the latest version of the utilities
 sudo apt-get install -y -q git-core
 sudo apt-get install -y -q --no-install-recommends etckeeper
+ETCKEEPER_CONF='/etc/etckeeper/etckeeper.conf'
+sudo sed -i 's/^VCS="bzr"/#VCS="bzr"/' ${ETCKEEPER_CONF}
+sudo sed -i 's/^#VCS="git"/VCS="git"/' ${ETCKEEPER_CONF}
+pushd . && cd /etc && sudo etckeeper init && sudo etckeeper commit -m "Initial Commit" && popd
 
 # install utilities
 sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
@@ -68,7 +72,7 @@ sudo locale-gen en_US en_US.UTF-8
 sudo apt-get install -y -q --no-install-recommends ubuntu-desktop
 sudo apt-get install -y -q virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
 sudo apt-get install -y -q gnome-session-flashback
-sudo apt-get autoremove -q -y --purge libreoffice*
+#sudo apt-get autoremove -q -y --purge libreoffice*
 # run GUI as non-privileged user
 sudo echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 
@@ -84,9 +88,6 @@ cd /opt && tar -zxvf spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.ta
 cd /opt && rm -f spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
 sudo chown -R vagrant:vagrant /opt
 cd /home/vagrant
-
-# install Chromium Browser
-sudo apt-get install -y -q chromium-browser
 
 # install MySQL with default passwoard as 'vagrant'
 export DEBIAN_FRONTEND=noninteractive
@@ -110,7 +111,6 @@ sudo apt-get install -y -q guake
 sudo cp /usr/share/applications/guake.desktop /etc/xdg/autostart/
 
 # install Atom
-
 wget -q https://github.com/atom/atom/releases/download/v1.3.2/atom-amd64.deb
 sudo dpkg -i atom-amd64.deb
 rm -f atom-amd64.deb
@@ -125,17 +125,12 @@ sudo apt-get install -y -q python3-csvkit xmlstarlet
 sudo npm install -g xml2json-command
 
 # AWS tools
-sudo apt-get install -y -q ec2-api-tools ec2-ami-tools
-sudo apt-get install -y -q iamcli rdscli moncli ascli elasticache aws-cloudformation-cli elbcli
+sudo apt-get install -y -q ec2-api-tools ec2-ami-tools \
+	iamcli rdscli moncli ascli elasticache aws-cloudformation-cli elbcli
 
 # install other tools
-sudo apt-get install -y -q bash-completion byobu tmux cdargs htop lsof ltrace strace zsh tofrodos ack-grep
-sudo apt-get install -y -q exuberant-ctags 
-sudo apt-get install -y -q unattended-upgrades
-sudo apt-get install -y -q pssh clusterssh
-
-# jq is a json formatter
-sudo apt-get install -y -q jq
+sudo apt-get install -y -q bash-completion byobu tmux cdargs htop lsof ltrace strace zsh tofrodos ack-grep \
+	 exuberant-ctags unattended-upgrades pssh clusterssh chromium-browser jq
 
 # No screensaver on a VM as host will lock things down
 gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
@@ -151,11 +146,6 @@ mkdir -p /home/vagrant/.m2
 git clone https://github.com/jhipster/jhipster-travis-build /home/vagrant/jhipster-travis-build
 mv /home/vagrant/jhipster-travis-build/repository /home/vagrant/.m2/
 rm -Rf /home/vagrant/jhipster-travis-build
-
-# create shortcuts
-sudo mkdir /home/vagrant/Desktop
-ln -s /opt/sts-bundle/sts-${STS_VERSION}/STS /home/vagrant/Desktop/STS
-sudo chown -R vagrant:vagrant /home/vagrant
 
 ## Get rid of unecessary items
 # online search
@@ -177,6 +167,12 @@ echo 'ChallengeResponseAuthentication yes' >> /etc/ssh/sshd_config
 sudo service ssh restart
 ## TODO: Each user still has to run the 'google-authenticator' tool on their own account
 
+
+# create shortcuts
+sudo mkdir /home/vagrant/Desktop
+ln -s /opt/sts-bundle/sts-${STS_VERSION}/STS /home/vagrant/Desktop/STS
+ln -s /usr/bin/byobu /home/vagrant/Desktop/byobu
+sudo chown -R vagrant:vagrant /home/vagrant
 
 # clean the box
 sudo apt-get clean -q
