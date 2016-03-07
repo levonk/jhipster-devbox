@@ -30,9 +30,11 @@ sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
 sudo echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo echo 'deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886
+pushd . && cd /etc && sudo etckeeper commit -m "added Java source" && popd
 ## Google Chrome repo
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+pushd . && cd /etc && sudo etckeeper commit -m "added Google Chrome source" && popd
 
 ## sudo apt-get update redundant with node installation
 #sudo apt-get update
@@ -46,6 +48,7 @@ sudo npm install -g npm
 sudo npm install -g yo bower grunt-cli gulp
 # install JHipster
 sudo npm install -g generator-jhipster@2.26.1
+pushd . && cd /etc && sudo etckeeper commit -m "added node" && popd
 
 
 # install Java 8
@@ -54,6 +57,7 @@ export JAVA_HOME='/usr/lib/jvm/java-8-oracle'
 sudo echo oracle-java-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 sudo apt-get install -y -q --force-yes oracle-java${JAVA_VERSION}-installer
 sudo update-java-alternatives -s java-8-oracle
+pushd . && cd /etc && sudo etckeeper commit -m "set java version" && popd
 
 # install maven
 export MAVEN_VERSION='3.3.9'
@@ -71,6 +75,7 @@ sudo echo 'LANGUAGE=en_US.UTF-8' >> /etc/environment
 sudo echo 'LC_ALL=en_US.UTF-8' >> /etc/environment
 sudo echo 'LC_CTYPE=en_US.UTF-8' >> /etc/environment
 sudo locale-gen en_US en_US.UTF-8
+pushd . && cd /etc && sudo etckeeper commit -m "force encoding" && popd
 
 
 # install Ubuntu desktop and VirtualBox guest tools
@@ -80,13 +85,33 @@ sudo apt-get install -y -q gnome-session-flashback
 #sudo apt-get autoremove -q -y --purge libreoffice*
 # run GUI as non-privileged user
 sudo echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
+pushd . && cd /etc && sudo etckeeper commit -m "xwrapper.config allow all users" && popd
+
+## Get rid of unecessary items
+# No screensaver on a VM as host will lock things down
+gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
+sudo apt-get remove -y -q gnome-screensaver
+# online search
+sudo apt-get remove -y -q unity-lens-shopping
+sudo gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
+pushd . && cd /etc && sudo etckeeper commit -m "no shopping search results" && popd
 
 ################################################################################
 # Install the development tools
 ################################################################################
+HOME_USER='vagrant'
+HOME_DIR="/home/${HOME_USER}"
+DEFAULT_PASSWORD="${HOME_USER}"
+HOME_GROUP="${HOME_USER}"
 
-# Install Google Chrome
-
+# secure the system (later)
+# http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/
+sudo apt-get install -y -q libpam-google-authenticator
+echo 'auth required pam_google_authenticator.so' >> /etc/pam.d/sshd
+echo 'ChallengeResponseAuthentication yes' >> /etc/ssh/sshd_config
+pushd . && cd /etc && sudo etckeeper commit -m "Google Authenticator settings" && popd
+sudo service ssh restart
+## TODO: Each user still has to run the 'google-authenticator' tool on their own account
 
 # install Spring Tool Suite
 export STS_VERSION='3.7.2.RELEASE'
@@ -94,8 +119,8 @@ export STS_VERSION='3.7.2.RELEASE'
 cd /opt && wget -q http://dist.springsource.com/release/STS/${STS_VERSION}/dist/e4.5/spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
 cd /opt && tar -zxvf spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
 cd /opt && rm -f spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
-sudo chown -R vagrant:vagrant /opt
-cd /home/vagrant
+sudo chown -R ${HOME_USER}:${HOME_GROUP} /opt
+cd ${HOME_DIR}
 
 # install MySQL with default passwoard as 'vagrant'
 export DEBIAN_FRONTEND=noninteractive
@@ -105,7 +130,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 # install Postgres with default password as 'vagrant'
 sudo apt-get install -y -q postgresql postgresql-client postgresql-contrib libpq-dev
-sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD 'vagrant';"
+sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD ${DEFAULT_PASSWORD};"
+pushd . && cd /etc && sudo etckeeper commit -m "Post Postgres" && popd
 
 # install Heroku toolbelt
 sudo wget -q -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
@@ -113,10 +139,11 @@ sudo wget -q -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 # install Cloud Foundry client
 cd /opt && sudo curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
 sudo ln -s /opt/cf /usr/bin/cf
-cd /home/vagrant
+cd ${HOME_DIR}
 #install Guake
 sudo apt-get install -y -q guake
 sudo cp /usr/share/applications/guake.desktop /etc/xdg/autostart/
+pushd . && cd /etc && sudo etckeeper commit -m "Post Guake" && popd
 
 # install Atom
 wget -q https://github.com/atom/atom/releases/download/v1.3.2/atom-amd64.deb
@@ -147,40 +174,35 @@ sudo gem install jekyll capistrano
 
 ## User Directory stuff
 # provide m2
-mkdir -p /home/vagrant/.m2
-git clone https://github.com/jhipster/jhipster-travis-build /home/vagrant/jhipster-travis-build
-mv /home/vagrant/jhipster-travis-build/repository /home/vagrant/.m2/
-rm -Rf /home/vagrant/jhipster-travis-build
+HOME_tmp="${HOME_DIR}/tmp"
+HOME_MVN="${HOME_DIR}/.m2"
+HOME_PROJ="${HOME_DIR}/proj"
+HOME_GITHUB="${HOME_PROJ}/github"
+mkdir -p ${HOME_PROJ}/bitbucket/levonk
+mkdir -p ${HOME_GITHUB}/jhipster
+mkdir -p ${HOME_GITHUB}/DGHLJ
+mkdir -p ${HOME_GITHUB}/levonk
+mkdir -p ${HOME_MVN}
 
-## Get rid of unecessary items
-# No screensaver on a VM as host will lock things down
-gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
-sudo apt-get remove -y -q gnome-screensaver
-# online search
-sudo apt-get remove -y -q unity-lens-shopping
-sudo gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
+git clone https://github.com/jhipster/jhipster-travis-build ${HOME_GITHUB}/jhipster/jhipster-travis-build
+mv ${HOME_GITHUB}/jhipster/jhipster-travis-build/repository ${HOME_MVN}
+rm -Rf ${HOME_GITHUB}/jhipster/jhipster-travis-build
 
-
-mkdir -p ~/proj/github/DGHLJ
-mkdir -p ~/proj/github/levonk
-mkdir -p ~/proj/bitbucket/levonk
-
-ssh-keygen -P 'changeme' -f '/home/vagrant/.ssh/id_ecdsa' -t ecdsa -C 'devbox autogenerated keypair'
-
-# secure the system (later)
-# http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/
-sudo apt-get install -y -q libpam-google-authenticator
-echo 'auth required pam_google_authenticator.so' >> /etc/pam.d/sshd
-echo 'ChallengeResponseAuthentication yes' >> /etc/ssh/sshd_config
-sudo service ssh restart
-## TODO: Each user still has to run the 'google-authenticator' tool on their own account
+HOME_SSH="${HOME_DIR}/.ssh"
+mkdir -p ${HOME_SSH}
+ssh-keygen -P 'changeme' -f "${HOME_SSH}/id_ecdsa" -t ecdsa -C 'devbox autogenerated keypair'
 
 
 # create shortcuts
-sudo mkdir /home/vagrant/Desktop
-ln -s /opt/sts-bundle/sts-${STS_VERSION}/STS /home/vagrant/Desktop/STS
-ln -s /usr/bin/byobu /home/vagrant/Desktop/byobu
-sudo chown -R vagrant:vagrant /home/vagrant
+HOME_DESKTOP="${HOME_DIR}/Desktop"
+sudo mkdir ${HOME_DESKTOP}
+ln -s /opt/sts-bundle/sts-${STS_VERSION}/STS ${HOME_DESKTOP}/STS
+ln -s /usr/bin/byobu ${HOME_DESKTOP}/Byobu
+ln -s /usr/bin/xterm ${HOME_DESKTOP}/XTerm
+ln -s /usr/bin/google-chrome ${HOME_DESKTOP}/Google-Chrome
+
+# Vagrant owns all
+sudo chown -R ${HOME_USER}:${HOME_GROUP} ${HOME_DIR}
 
 # clean the box
 sudo apt-get clean -q
