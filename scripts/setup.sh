@@ -30,8 +30,13 @@ sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
 sudo echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo echo 'deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886
+## Google Chrome repo
+wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+
 ## sudo apt-get update redundant with node installation
 #sudo apt-get update
+
 # install node.js
 sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo bash -
 sudo apt-get install -y -q nodejs unzip python g++ build-essential
@@ -80,6 +85,9 @@ sudo echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 # Install the development tools
 ################################################################################
 
+# Install Google Chrome
+
+
 # install Spring Tool Suite
 export STS_VERSION='3.7.2.RELEASE'
 
@@ -125,16 +133,13 @@ sudo apt-get install -y -q python3-csvkit xmlstarlet
 sudo npm install -g xml2json-command
 
 # AWS tools
-sudo apt-get install -y -q ec2-api-tools ec2-ami-tools \
-	iamcli rdscli moncli ascli elasticache aws-cloudformation-cli elbcli
 
 # install other tools
 sudo apt-get install -y -q bash-completion byobu tmux cdargs htop lsof ltrace strace zsh tofrodos ack-grep \
-	 exuberant-ctags unattended-upgrades pssh clusterssh chromium-browser jq
-
-# No screensaver on a VM as host will lock things down
-gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
-sudo apt-get remove -y -q gnome-screensaver
+	exuberant-ctags unattended-upgrades pssh clusterssh chromium-browser jq \
+	ec2-api-tools ec2-ami-tools \
+	iamcli rdscli moncli ascli elasticache aws-cloudformation-cli elbcli \
+	google-chrome-stable
 
 # jekyll blogging
 curl -L https://get.rvm.io | sudo bash -s stable --ruby=2.0.0
@@ -148,6 +153,9 @@ mv /home/vagrant/jhipster-travis-build/repository /home/vagrant/.m2/
 rm -Rf /home/vagrant/jhipster-travis-build
 
 ## Get rid of unecessary items
+# No screensaver on a VM as host will lock things down
+gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
+sudo apt-get remove -y -q gnome-screensaver
 # online search
 sudo apt-get remove -y -q unity-lens-shopping
 sudo gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
