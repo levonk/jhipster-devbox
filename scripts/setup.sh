@@ -44,7 +44,7 @@ export JAVA_VERSION='8'
 export JAVA_HOME='/usr/lib/jvm/java-8-oracle'
 sudo echo oracle-java-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 sudo apt-get install -y -q --force-yes oracle-java${JAVA_VERSION}-installer
-sudo update-java-alternatives --quiet -s java-8-oracle
+sudo update-java-alternatives -s java-8-oracle
 
 # install maven
 export MAVEN_VERSION='3.3.9'
