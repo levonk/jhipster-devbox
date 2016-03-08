@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # update the system
 sudo apt-get update
@@ -21,7 +21,7 @@ sudo apt-get install -y -q --no-install-recommends etckeeper
 ETCKEEPER_CONF='/etc/etckeeper/etckeeper.conf'
 sudo sed -i 's/^VCS="bzr"/#VCS="bzr"/' ${ETCKEEPER_CONF}
 sudo sed -i 's/^#VCS="git"/VCS="git"/' ${ETCKEEPER_CONF}
-pushd . && cd /etc && sudo etckeeper init && sudo etckeeper commit -m "Initial Commit" && popd
+pushd . && cd /etc && sudo etckeeper init && sudo etckeeper commit -m "Initial Commit" ; popd
 
 # install utilities
 sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
@@ -30,11 +30,11 @@ sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
 sudo echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo echo 'deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886
-pushd . && cd /etc && sudo etckeeper commit -m "added Java source" && popd
+pushd . && cd /etc && sudo etckeeper commit -m "added Java source" ; popd
 ## Google Chrome repo
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-pushd . && cd /etc && sudo etckeeper commit -m "added Google Chrome source" && popd
+pushd . && cd /etc && sudo etckeeper commit -m "added Google Chrome source" ; popd
 
 ## sudo apt-get update redundant with node installation
 #sudo apt-get update
@@ -48,7 +48,7 @@ sudo npm install -g npm
 sudo npm install -g yo bower grunt-cli gulp
 # install JHipster
 sudo npm install -g generator-jhipster@2.26.1
-pushd . && cd /etc && sudo etckeeper commit -m "added node" && popd
+pushd . && cd /etc && sudo etckeeper commit -m "added node" ; popd
 
 
 # install Java 8
@@ -57,7 +57,7 @@ export JAVA_HOME='/usr/lib/jvm/java-8-oracle'
 sudo echo oracle-java-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 sudo apt-get install -y -q --force-yes oracle-java${JAVA_VERSION}-installer
 sudo update-java-alternatives -s java-8-oracle
-pushd . && cd /etc && sudo etckeeper commit -m "set java version" && popd
+pushd . && cd /etc && sudo etckeeper commit -m "set java version" ; popd
 
 # install maven
 export MAVEN_VERSION='3.3.9'
@@ -75,7 +75,7 @@ sudo echo 'LANGUAGE=en_US.UTF-8' >> /etc/environment
 sudo echo 'LC_ALL=en_US.UTF-8' >> /etc/environment
 sudo echo 'LC_CTYPE=en_US.UTF-8' >> /etc/environment
 sudo locale-gen en_US en_US.UTF-8
-pushd . && cd /etc && sudo etckeeper commit -m "force encoding" && popd
+pushd . && cd /etc && sudo etckeeper commit -m "force encoding" ; popd
 
 
 # install Ubuntu desktop and VirtualBox guest tools
@@ -85,40 +85,40 @@ sudo apt-get install -y -q gnome-session-flashback
 #sudo apt-get autoremove -q -y --purge libreoffice*
 # run GUI as non-privileged user
 sudo echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
-pushd . && cd /etc && sudo etckeeper commit -m "xwrapper.config allow all users" && popd
+pushd . && cd /etc && sudo etckeeper commit -m "xwrapper.config allow all users" ; popd
 
 ## Get rid of unecessary items
-# No screensaver on a VM as host will lock things down
+echo 'No screensaver on a VM as host will lock things down'
 gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
+echo 'remove screensaver'
 sudo apt-get remove -y -q gnome-screensaver
 # online search
-sudo apt-get remove -y -q unity-lens-shopping
+echo 'set gsettings'
 sudo gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
-pushd . && cd /etc && sudo etckeeper commit -m "no shopping search results" && popd
+echo 'remove unity-lens-shopping'
+sudo apt-get remove -y -q unity-lens-shopping
+echo 'commit online search changes'
+pushd . && cd /etc && sudo etckeeper commit -m "no shopping search results" ; popd
 
 ################################################################################
 # Install the development tools
 ################################################################################
+echo 'install development tools'
 HOME_USER='vagrant'
 HOME_DIR="/home/${HOME_USER}"
 DEFAULT_PASSWORD="${HOME_USER}"
 HOME_GROUP="${HOME_USER}"
 
-# secure the system (later)
-# http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/
-sudo apt-get install -y -q libpam-google-authenticator
-echo 'auth required pam_google_authenticator.so' >> /etc/pam.d/sshd
-echo 'ChallengeResponseAuthentication yes' >> /etc/ssh/sshd_config
-pushd . && cd /etc && sudo etckeeper commit -m "Google Authenticator settings" && popd
-sudo service ssh restart
-## TODO: Each user still has to run the 'google-authenticator' tool on their own account
-
-# install Spring Tool Suite
+echo 'install Spring Tool Suite'
 export STS_VERSION='3.7.2.RELEASE'
 
+echo 'download Spring Tool Suite'
 cd /opt && wget -q http://dist.springsource.com/release/STS/${STS_VERSION}/dist/e4.5/spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
+echo 'unpack Spring Tool Suite'
 cd /opt && tar -zxvf spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
+echo 'cleanup archive Spring Tool Suite'
 cd /opt && rm -f spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
+echo 'chown Spring Tool Suite'
 sudo chown -R ${HOME_USER}:${HOME_GROUP} /opt
 cd ${HOME_DIR}
 
@@ -128,10 +128,12 @@ export DEBIAN_FRONTEND=noninteractive
 #echo 'mysql-server mysql-server/root_password_again password vagrant' | sudo debconf-set-selections
 #sudo apt-get install -y -q mysql-server mysql-workbench
 
-# install Postgres with default password as 'vagrant'
+echo "install Postgres"
 sudo apt-get install -y -q postgresql postgresql-client postgresql-contrib libpq-dev
+echo "set Postgres default password as 'vagrant'"
 sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD ${DEFAULT_PASSWORD};"
-pushd . && cd /etc && sudo etckeeper commit -m "Post Postgres" && popd
+echo "commit Postgres"
+pushd . && cd /etc && sudo etckeeper commit -m "Post Postgres" ; popd
 
 # install Heroku toolbelt
 sudo wget -q -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
@@ -143,7 +145,7 @@ cd ${HOME_DIR}
 #install Guake
 sudo apt-get install -y -q guake
 sudo cp /usr/share/applications/guake.desktop /etc/xdg/autostart/
-pushd . && cd /etc && sudo etckeeper commit -m "Post Guake" && popd
+pushd . && cd /etc && sudo etckeeper commit -m "Post Guake" ; popd
 
 # install Atom
 wget -q https://github.com/atom/atom/releases/download/v1.3.2/atom-amd64.deb
@@ -203,6 +205,16 @@ ln -s /usr/bin/google-chrome ${HOME_DESKTOP}/Google-Chrome
 
 # Vagrant owns all
 sudo chown -R ${HOME_USER}:${HOME_GROUP} ${HOME_DIR}
+
+# secure the system (later)
+# http://www.howtogeek.com/121650/how-to-secure-ssh-with-google-authenticators-two-factor-authentication/
+sudo apt-get install -y -q libpam-google-authenticator
+echo 'auth required pam_google_authenticator.so' >> /etc/pam.d/sshd
+echo 'ChallengeResponseAuthentication yes' >> /etc/ssh/sshd_config
+pushd . && cd /etc && sudo etckeeper commit -m "Google Authenticator settings" ; popd
+#sudo service ssh restart ## This kills the script so don't do it
+## TODO: Each user still has to run the 'google-authenticator' tool on their own account
+
 
 # clean the box
 sudo apt-get clean -q
