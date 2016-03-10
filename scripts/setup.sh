@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# https://spring.io/tools/sts/all
+export STS_VERSION='3.7.3.RELEASE'
+export ECLIPSE_VERSION='e4.6'
+export MAVEN_VERSION='3.3.9'
+export JAVA_VERSION='8'
+
 # update the system
 sudo apt-get update
 sudo apt-get upgrade -y -q
@@ -52,15 +58,13 @@ pushd . && cd /etc && sudo etckeeper commit -m "added node" ; popd
 
 
 # install Java 8
-export JAVA_VERSION='8'
-export JAVA_HOME='/usr/lib/jvm/java-8-oracle'
+export JAVA_HOME='/usr/lib/jvm/java-${JAVA_VERSION}-oracle'
 sudo echo oracle-java-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 sudo apt-get install -y -q --force-yes oracle-java${JAVA_VERSION}-installer
-sudo update-java-alternatives -s java-8-oracle
+sudo update-java-alternatives -s java-${JAVA_VERSION}-oracle
 pushd . && cd /etc && sudo etckeeper commit -m "set java version" ; popd
 
 # install maven
-export MAVEN_VERSION='3.3.9'
 export MAVEN_HOME='/usr/share/maven'
 export PATH=$PATH:$MAVEN_HOME/bin
 sudo curl -fsSL http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz | sudo tar xzf - -C /usr/share && sudo mv /usr/share/apache-maven-${MAVEN_VERSION} /usr/share/maven && sudo ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
@@ -110,14 +114,14 @@ DEFAULT_PASSWORD="${HOME_USER}"
 HOME_GROUP="${HOME_USER}"
 
 echo 'install Spring Tool Suite'
-export STS_VERSION='3.7.2.RELEASE'
+STS_DOWNLOAD=spring-tool-suite-${STS_VERSION}-${ECLIPSE_VERSION}-linux-gtk-x86_64.tar.gz
 
 echo 'download Spring Tool Suite'
-cd /opt && wget -q http://dist.springsource.com/release/STS/${STS_VERSION}/dist/e4.5/spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
+cd /opt && wget -q http://dist.springsource.com/release/STS/${STS_VERSION}/dist/${ECLIPSE_VERSION}/${STS_DOWNLOAD}
 echo 'unpack Spring Tool Suite'
-cd /opt && tar -zxvf spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
+cd /opt && tar -zxvf ${STS_DOWNLOAD}
 echo 'cleanup archive Spring Tool Suite'
-cd /opt && rm -f spring-tool-suite-${STS_VERSION}-e4.5.1-linux-gtk-x86_64.tar.gz
+cd /opt && rm -f ${STS_DOWNLOAD}
 echo 'chown Spring Tool Suite'
 sudo chown -R ${HOME_USER}:${HOME_GROUP} /opt
 cd ${HOME_DIR}
