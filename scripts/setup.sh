@@ -29,15 +29,15 @@ sudo sed -i 's/^VCS="bzr"/#VCS="bzr"/' ${ETCKEEPER_CONF}
 sudo sed -i 's/^#VCS="git"/VCS="git"/' ${ETCKEEPER_CONF}
 pushd . && cd /etc && sudo etckeeper init && sudo etckeeper commit -m "Initial Commit" ; popd
 
-# install utilities
+echo '### base install utilities'
 sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
 
-# install Java 8 repos
+echo '### install Java 8 repos'
 sudo echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo echo 'deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886
 pushd . && cd /etc && sudo etckeeper commit -m "added Java source" ; popd
-## Google Chrome repo
+echo '### Google Chrome repo'
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 pushd . && cd /etc && sudo etckeeper commit -m "added Google Chrome source" ; popd
@@ -45,26 +45,25 @@ pushd . && cd /etc && sudo etckeeper commit -m "added Google Chrome source" ; po
 ## sudo apt-get update redundant with node installation
 #sudo apt-get update
 
-# install node.js
+echo '### install node.js'
 sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo bash -
 sudo apt-get install -y -q nodejs unzip python g++ build-essential
-# update npm
+echo '### update npm'
 sudo npm install -g npm
-# install yeoman grunt bower grunt gulp
+echo '### install yeoman grunt bower grunt gulp'
 sudo npm install -g yo bower grunt-cli gulp
-# install JHipster
+echo '### install JHipster'
 sudo npm install -g generator-jhipster@2.26.1
 pushd . && cd /etc && sudo etckeeper commit -m "added node" ; popd
 
-
-# install Java 8
+echo '### install Java 8'
 export JAVA_HOME='/usr/lib/jvm/java-${JAVA_VERSION}-oracle'
 sudo echo oracle-java-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 sudo apt-get install -y -q --force-yes oracle-java${JAVA_VERSION}-installer
 sudo update-java-alternatives -s java-${JAVA_VERSION}-oracle
 pushd . && cd /etc && sudo etckeeper commit -m "set java version" ; popd
 
-# install maven
+echo '### install Maven'
 export MAVEN_HOME='/usr/share/maven'
 export PATH=$PATH:$MAVEN_HOME/bin
 sudo curl -fsSL http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz | sudo tar xzf - -C /usr/share && sudo mv /usr/share/apache-maven-${MAVEN_VERSION} /usr/share/maven && sudo ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
@@ -73,7 +72,7 @@ sudo curl -fsSL http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/bi
 # Install the graphical environment
 ################################################################################
 
-# force encoding
+echo '### force encoding'
 sudo echo 'LANG=en_US.UTF-8' >> /etc/environment
 sudo echo 'LANGUAGE=en_US.UTF-8' >> /etc/environment
 sudo echo 'LC_ALL=en_US.UTF-8' >> /etc/environment
@@ -81,17 +80,16 @@ sudo echo 'LC_CTYPE=en_US.UTF-8' >> /etc/environment
 sudo locale-gen en_US en_US.UTF-8
 pushd . && cd /etc && sudo etckeeper commit -m "force encoding" ; popd
 
-
-# install Ubuntu desktop and VirtualBox guest tools
+echo '### install Ubuntu desktop and VirtualBox guest tools'
 sudo apt-get install -y -q --no-install-recommends ubuntu-desktop
 sudo apt-get install -y -q virtualbox-guest-dkms virtualbox-guest-utils virtualbox-guest-x11
 sudo apt-get install -y -q gnome-session-flashback
 #sudo apt-get autoremove -q -y --purge libreoffice*
-# run GUI as non-privileged user
+echo '### run GUI as non-privileged user'
 sudo echo 'allowed_users=anybody' > /etc/X11/Xwrapper.config
 pushd . && cd /etc && sudo etckeeper commit -m "xwrapper.config allow all users" ; popd
 
-## Get rid of unecessary items
+echo '### Get rid of unecessary items'
 echo '### No screensaver on a VM as host will lock things down'
 gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
 echo '### remove screensaver'
