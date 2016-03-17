@@ -33,9 +33,9 @@ echo '##### base install utilities'
 sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
 
 echo '##### install Java 8 repos'
-sudo echo 'deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
-sudo echo 'deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main' >> /etc/apt/sources.list
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886
+sudo sh -c 'echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/java.list'
+sudo sh -c 'echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/java.list'
 pushd . && cd /etc && sudo etckeeper commit -m "added Java source" ; popd
 echo '##### Google Chrome repo'
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
@@ -45,6 +45,12 @@ pushd . && cd /etc && sudo etckeeper commit -m "added Google Chrome source" ; po
 echo '##### install AWS repos'
 sudo apt-add-repository ppa:awstools-dev/awstools
 pushd . && cd /etc && sudo etckeeper commit -m "added AWS tools source" ; popd
+
+echo '##### install docker repos'
+sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+sudo sh -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" >> /etc/apt/sources.list.d/docker.list'
+pushd . && cd /etc && sudo etckeeper commit -m "added Docker source" ; popd
+
 
 ## sudo apt-get update redundant with node installation
 #sudo apt-get update
@@ -105,6 +111,18 @@ echo '##### remove unity-lens-shopping'
 sudo apt-get remove -y -q unity-lens-shopping
 echo '##### commit online search changes'
 pushd . && cd /etc && sudo etckeeper commit -m "no shopping search results" ; popd
+
+echo '##### install docker'
+# https://docs.docker.com/engine/installation/linux/ubuntulinux/
+sudo apt-get purge lxc-docker
+sudo apt-get install -y -q linux-image-extra-$(uname -r) 
+sudo apt-get install -y -q apparmor
+sudo apt-get install -y -q docker-engine
+sudo usermod -aG docker ubuntu
+sudo usermod -aG docker vagrant
+sudo sed -i 's/^DEFAULT_FORWARD_POLICY="DROP"/DEFAULT_FORWARD_POLICY="ACCEPT"/' /etc/default/ufw
+echo '##### enable docker to start on boot'
+sudo systemctl enable docker
 
 ##################################################################################
 # Install the development tools
