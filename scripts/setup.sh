@@ -235,4 +235,5 @@ sudo apt-get clean -q
 sudo apt-get autoremove -q
 dd if=/dev/zero of=/EMPTY bs=1M > /dev/null 2>&1
 rm -f /EMPTY
+echo '### Reboot the box to get GUI'
 sudo shutdown -r now
