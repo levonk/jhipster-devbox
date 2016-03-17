@@ -166,7 +166,6 @@ sudo apt-get install -y -q golang-go
 go get github.com/jehiah/json2csv
 
 echo '### install csvkit'
->>>>>>> 025a9ffdc8d99def845fa7e4ba9656e5a7676641
 sudo apt-get install -y -q python3-csvkit xmlstarlet
 sudo npm install -g xml2json-command
 
