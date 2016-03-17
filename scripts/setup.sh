@@ -42,6 +42,10 @@ wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-ke
 sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
 pushd . && cd /etc && sudo etckeeper commit -m "added Google Chrome source" ; popd
 
+echo '##### install AWS repos'
+sudo apt-add-repository ppa:awstools-dev/awstools
+pushd . && cd /etc && sudo etckeeper commit -m "added AWS tools source" ; popd
+
 ## sudo apt-get update redundant with node installation
 #sudo apt-get update
 
@@ -96,7 +100,7 @@ echo '##### remove screensaver'
 sudo apt-get remove -y -q gnome-screensaver
 # online search
 echo '##### set gsettings'
-sudo gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
+##sudo gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
 echo '##### remove unity-lens-shopping'
 sudo apt-get remove -y -q unity-lens-shopping
 echo '##### commit online search changes'
@@ -174,8 +178,11 @@ echo '##### install other tools'
 sudo apt-get install -y -q bash-completion byobu tmux cdargs htop lsof ltrace strace zsh tofrodos ack-grep \
 	exuberant-ctags unattended-upgrades pssh clusterssh chromium-browser jq \
 	ec2-api-tools ec2-ami-tools \
-	iamcli rdscli moncli ascli elasticache aws-cloudformation-cli elbcli \
+	iamcli rdscli moncli ascli elasticache elbcli \
 	google-chrome-stable
+
+echo '##### install cloudformation'
+sudo apt-get install -y -q aws-cloudformation-cli
 
 echo '##### install jekyll blogging'
 curl -L https://get.rvm.io | sudo bash -s stable --ruby=2.0.0
@@ -209,9 +216,9 @@ echo '##### Create shortcuts'
 HOME_DESKTOP="${HOME_DIR}/Desktop"
 sudo mkdir ${HOME_DESKTOP}
 ln -s /opt/sts-bundle/sts-${STS_VERSION}/STS ${HOME_DESKTOP}/STS
-ln -s /usr/bin/byobu ${HOME_DESKTOP}/Byobu
-ln -s /usr/bin/xterm ${HOME_DESKTOP}/XTerm
-ln -s /usr/bin/google-chrome ${HOME_DESKTOP}/Google-Chrome
+##ln -s /usr/bin/byobu ${HOME_DESKTOP}/Byobu
+##ln -s /usr/bin/xterm ${HOME_DESKTOP}/XTerm
+##ln -s /usr/bin/google-chrome ${HOME_DESKTOP}/Google-Chrome
 
 # Vagrant owns all
 sudo chown -R ${HOME_USER}:${HOME_GROUP} ${HOME_DIR}
