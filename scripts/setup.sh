@@ -106,6 +106,7 @@ echo '##### remove screensaver'
 sudo apt-get remove -y -q gnome-screensaver
 # online search
 echo '##### set gsettings'
+## TODO: http://askubuntu.com/questions/501880/applications-dont-appear-in-the-dash-14-04
 ##sudo gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
 echo '##### remove unity-lens-shopping'
 sudo apt-get remove -y -q unity-lens-shopping
