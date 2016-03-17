@@ -135,7 +135,7 @@ export DEBIAN_FRONTEND=noninteractive
 echo '### install Postgres'
 sudo apt-get install -y -q postgresql postgresql-client postgresql-contrib libpq-dev
 echo "set Postgres default password as 'vagrant'"
-sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD ${DEFAULT_PASSWORD};"
+sudo -u postgres psql -c "CREATE USER admin WITH PASSWORD '${DEFAULT_PASSWORD}';"
 echo 'commit Postgres'
 pushd . && cd /etc && sudo etckeeper commit -m "Post Postgres" ; popd
 
