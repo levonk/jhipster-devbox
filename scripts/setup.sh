@@ -222,7 +222,7 @@ mkdir -p ${HOME_GITHUB}/levonk
 mkdir -p ${HOME_MVN}
 
 echo '##### JHipster Maven Repo Priming'
-git clone https://github.com/jhipster/jhipster-travis-build ${HOME_GITHUB}/jhipster/jhipster-travis-build
+git clone -q --depth=1 https://github.com/jhipster/jhipster-travis-build ${HOME_GITHUB}/jhipster/jhipster-travis-build
 mv ${HOME_GITHUB}/jhipster/jhipster-travis-build/repository ${HOME_MVN}
 rm -Rf ${HOME_GITHUB}/jhipster/jhipster-travis-build
 
@@ -236,6 +236,7 @@ echo '##### Create shortcuts'
 HOME_DESKTOP="${HOME_DIR}/Desktop"
 sudo mkdir ${HOME_DESKTOP}
 ln -s /opt/sts-bundle/sts-${STS_VERSION}/STS ${HOME_DESKTOP}/STS
+## TODO: How do we get these to work
 ##ln -s /usr/bin/byobu ${HOME_DESKTOP}/Byobu
 ##ln -s /usr/bin/xterm ${HOME_DESKTOP}/XTerm
 ##ln -s /usr/bin/google-chrome ${HOME_DESKTOP}/Google-Chrome
