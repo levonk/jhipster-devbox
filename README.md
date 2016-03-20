@@ -192,6 +192,7 @@ Start up the new box:
 		- set up 2 node kafka cluster
 		- set up schema registry
 		- set up REST Interface
+		- set up Kafka Manager
 	- set up Spark
 		- set up 3 node spark cluster
 - cleanup
