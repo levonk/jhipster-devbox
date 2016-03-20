@@ -88,3 +88,117 @@ Start up the new box:
 - Use the JHipster tools
   - Running `mvn` will run your JHipster application on port `8080`. As this port is forwarded to your host, you can also use `http://localhost:8080` on your host machine
   - Running `grunt` will launch your AngularJS front-end with BrowserSync on port `3000`: it is also forwarded to your host, so you can also use `http://localhost:3000` on your host machine
+
+## Plan
+- Bootstrap
+	- set versions of various files
+	- sudo apt-get update
+	- sudo apt-get upgrade -y -q
+	- set Languages
+	- sudo locale-gen
+	- sudo dpkg-reconfigure locales
+	- etckeeper
+		- git-core
+		- etckeeper (nodeps)
+		- set git-core for etckeeper
+		- commit to etckeeper
+	- chef
+		- chef client
+- Via chef
+	- Set up repos
+		- Java 8
+		- Google Chrome
+		- AWS
+		- Docker 
+	- Set up google-authenticator
+	- Set up NPM & Node
+	- Set up Java 8
+	- Set up Maven
+	- Set up Graphical enviornment
+		- Encodings
+		- Ubuntu Desktop
+		- Virtualbox guest utils
+		- Run GUI as non-priviledged user
+		- Remove screensaver
+		- TODO: don't lock desktop
+		- remove unity-lens-shopping
+	- set up data tools
+		- json2csv
+		- xml2json
+		- csvkit
+		- xmlstarlet
+	- set up devops tools
+		- set up docker tools
+		- set up chef tools
+		- set up packer tools
+		- set up terraform tools
+		- set up CloudFoundry tools
+	- Docker prereqs
+		- apt-get purge lxc-docker
+		- linux-image-extra
+		- apparmor
+		- docker-engine
+		- enable docker
+	- user tools
+		- bash-completion
+		- zsh
+		- fish
+		- mosh
+		- tmux
+		- byobu
+		- cdargs
+		- htop
+		- lsof
+		- ltrace
+		- strace
+		- tofrodos
+		- ack-grep
+		- exuberant-ctags
+		- unattended-upgrades
+		- pssh
+		- clusterssh
+		- chromium-browser
+		- google-chrome-stable
+		- jq
+		- Amazon tools
+			- ec2-api-toosl
+			- ec2-ami-toosl
+			- iamcli
+			- rdscli
+			- moncli
+			- ascli
+			- elasticache
+			- elbcli
+	- user directory
+		- home directory
+		- spring tool suite
+		- Jekyll blogging
+		- prim .m2
+		- proj directory
+		- generate ssh key
+- via Docker
+	- set up Jenkins
+	- set up Nexus repo
+	- set up Elasticsearch
+	- set up Logstash
+	- set up Kibana
+	- set up dep proxy
+	- set up squid proxy
+	- set up openvpn server
+	- set up postgres
+	- set up mongodb
+	- set up Apache Titan
+	- set up Confluent
+		- set up 2 node kafka cluster
+		- set up schema registry
+		- set up REST Interface
+	- set up Spark
+		- set up 3 node spark cluster
+- cleanup
+	- clean up tmp
+	- remove apt-get cache
+	- write empty bytes
+	- rm empty bytes
+	- rm empty bytes
+	- restart
+	
