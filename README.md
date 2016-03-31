@@ -1,7 +1,16 @@
 # JHipster official "development box"
 
-## Introduction
+## TODO
 
+- Install Git https://help.github.com/articles/set-up-git/
+- Install VirtualBox https://www.virtualbox.org/wiki/Downloads
+- Install Vagrant https://www.vagrantup.com/downloads.html
+- git clone https://github.com/jhipster/jhipster-devbox.git
+- Add Vagrant to your path if it wasn't done for you in Vagrant install
+- Go do directory where the above was cloned and do
+- vagrant up
+
+## Introduction
 This is a [Vagrant](https://www.vagrantup.com/) configuration to set up a complete, virtualized development environment for JHipster users.
 
 ## Usage
