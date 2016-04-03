@@ -37,6 +37,7 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886
 sudo sh -c 'echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/java.list'
 sudo sh -c 'echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/java.list'
 pushd . && cd /etc && sudo etckeeper commit -m "added Java source" ; popd
+
 echo '##### Google Chrome repo'
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
@@ -218,6 +219,20 @@ mkdir -p ${HOME_GITHUB}/jhipster
 mkdir -p ${HOME_GITHUB}/DGHLJ
 mkdir -p ${HOME_GITHUB}/levonk
 mkdir -p ${HOME_MVN}
+
+pushd .
+CURR_PROJ=${HOME_GITHUB}/levonk/jhipster-devbox
+mkdir ${CURR_PROJ}
+cd ${CURR_PROJ}
+git clone git@github.com:levonk/jhipster-devbox.git
+popd
+
+pushd .
+CURR_PROJ=${HOME_GITHUB}/DGHLJ/pub-maven-archetypes
+mkdir ${CURR_PROJ}
+cd ${CURR_PROJ}
+git clone git@github.com:DGHLJ/pub-maven-archetypes.git
+popd
 
 echo "####### Prime Maven repository"
 git clone https://github.com/jhipster/jhipster-travis-build ${HOME_GITHUB}/jhipster/jhipster-travis-build
