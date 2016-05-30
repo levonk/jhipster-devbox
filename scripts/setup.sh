@@ -107,6 +107,9 @@ gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
 # here for newer versions
 gsettings set org.gnome.settings-daemon.plugins.power sleep-display-ac 0
 gsettings set org.gnome.settings-daemon.plugins.power sleep-display-battery 0
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout 0
+gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 0
+
 gsettings set org.gnome.desktop.session idle-delay 0
 echo '##### remove screensaver'
 sudo apt-get remove -y -q gnome-screensaver
