@@ -102,7 +102,12 @@ pushd . && cd /etc && sudo etckeeper commit -m "xwrapper.config allow all users"
 
 echo '##### Get rid of unecessary items'
 echo '##### No screensaver on a VM as host will lock things down'
+# here for older versions
 gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
+# here for newer versions
+gsettings set org.gnome.settings-daemon.plugins.power sleep-display-ac 0
+gsettings set org.gnome.settings-daemon.plugins.power sleep-display-battery 0
+gsettings set org.gnome.desktop.session idle-delay 0
 echo '##### remove screensaver'
 sudo apt-get remove -y -q gnome-screensaver
 # online search
