@@ -210,7 +210,7 @@ sudo apt-get install -y -q bash-completion byobu tmux cdargs htop lsof ltrace st
 	exuberant-ctags unattended-upgrades pssh clusterssh chromium-browser jq \
 	ec2-api-tools ec2-ami-tools \
 	iamcli rdscli moncli ascli elasticache elbcli \
-	google-chrome-stable
+	google-chrome-stable parallel
 
 # jekyll blogging
 echo "####### install Jekyll Blogging Platfrom"
