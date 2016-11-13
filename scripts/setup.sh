@@ -119,7 +119,9 @@ echo '##### set gsettings'
 ## TODO: desktop-file-validate /user/share/applications/*.desktop
 ##sudo gsettings set com.canonical.Unity.Lenses disabled-scopes "['more_suggestions-amazon.scope', 'more_suggestions-u1ms.scope', 'more_suggestions-populartracks.scope', 'music-musicstore.scope', 'more_suggestions-ebay.scope', 'more_suggestions-ubuntushop.scope', 'more_suggestions-skimlinks.scope']"
 echo '##### remove unity-lens-shopping'
-sudo apt-get remove -y -q unity-lens-shopping
+## using apt get causes the dependencies to get removed, use dpkg direclty
+#sudo apt-get remove -y -q unity-lens-shopping
+sudo dpkg -r --force-depends unity-lens-shopping
 echo '##### commit online search changes'
 pushd . && cd /etc && sudo etckeeper commit -m "no shopping search results" ; popd
 
