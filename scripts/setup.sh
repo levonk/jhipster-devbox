@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # https://spring.io/tools/sts/all
-export STS_VERSION='3.7.3.RELEASE'
-export ECLIPSE_VERSION='e4.6'
+export STS_VERSION='3.8.2.RELEASE'
+export ECLIPSE_VERSION='e4.6.1'
 export MAVEN_VERSION='3.3.9'
 export JAVA_VERSION='8'
 
