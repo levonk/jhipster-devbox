@@ -32,6 +32,10 @@ pushd . && cd /etc && sudo etckeeper init && sudo etckeeper commit -m "Initial C
 echo '##### base install utilities'
 sudo apt-get install -y -q vim git sudo zip bzip2 fontconfig curl
 
+echo '##### install Neovim repos'
+sudo apt-add-repository ppa:neovim-ppa/unstable
+pushd . && cd /etc && sudo etckeeper commit -m "added neovim apt repo" ; popd
+
 echo '##### install Java 8 repos'
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886
 sudo sh -c 'echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list.d/java.list'
@@ -80,6 +84,9 @@ echo '##### install Maven'
 export MAVEN_HOME='/usr/share/maven'
 export PATH=$PATH:$MAVEN_HOME/bin
 sudo curl -fsSL http://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz | sudo tar xzf - -C /usr/share && sudo mv /usr/share/apache-maven-${MAVEN_VERSION} /usr/share/maven && sudo ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+
+echo '##### install Maven'
+sudo apt-get install -y -q neovim
 
 ##################################################################################
 # Install the graphical environment
