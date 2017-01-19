@@ -6,10 +6,6 @@ export ECLIPSE_VERSION='e4.6.1'
 export MAVEN_VERSION='3.3.9'
 export JAVA_VERSION='8'
 
-# update the system
-sudo apt-get update
-sudo apt-get upgrade -y -q
-
 ##################################################################################
 # This is a port of the JHipster Dockerfile,
 # see https://github.com/jhipster/jhipster-docker/
@@ -20,6 +16,10 @@ export LANG='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
 sudo locale-gen en_US.UTF-8
 sudo dpkg-reconfigure locales
+
+# update the system
+sudo apt-get update
+sudo apt-get upgrade -y -q
 
 # we need to update to assure the latest version of the utilities
 sudo apt-get install -y -q git-core
@@ -51,7 +51,7 @@ echo '##### install docker repos'
 sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
 sudo sh -c 'echo "deb https://apt.dockerproject.org/repo ubuntu-trusty main" >> /etc/apt/sources.list.d/docker.list'
 pushd . && cd /etc && sudo etckeeper commit -m "added Docker source" ; popd
-sudo curl -L https://github.com/docker/compose/releases/download/1.9.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+sudo (curl -L https://github.com/docker/compose/releases/download/1.9.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose)
 sudo chmod +x /usr/local/bin/docker-compose
 
 
