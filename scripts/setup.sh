@@ -11,6 +11,8 @@ export JAVA_VERSION='8'
 # see https://github.com/jhipster/jhipster-docker/
 ##################################################################################
 
+## Should probably consider using https://sdkman.io/sdks
+
 export LANGUAGE='en_US.UTF-8'
 export LANG='en_US.UTF-8'
 export LC_ALL='en_US.UTF-8'
